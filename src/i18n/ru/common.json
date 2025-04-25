@@ -1,0 +1,4 @@
+{
+  "auth.invalid_credentials": "Неверный email или пароль",
+  "auth.blocked": "Пользователь заблокирован"
+}

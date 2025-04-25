@@ -7,8 +7,6 @@ import { TasksModule } from './tasks/tasks.module';
 import { DocumentsModule } from './documents/documents.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { AnalyticsModule } from './analytics/analytics.module';
-import { AuthController } from './auth/auth.controller';
-import { AuthService } from './auth/auth.service';
 import { ChatGateway } from './chat/chat.gateway';
 import { VideoCallGateway } from './video-call/video-call.gateway';
 import { RoomController } from './video-call/room/room.controller';
@@ -25,10 +23,29 @@ import { DatabaseModule } from './database/database.module';
 import { JobsModule } from './jobs/jobs.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import {
+  I18nModule,
+  QueryResolver,
+  AcceptLanguageResolver,
+  HeaderResolver,
+} from 'nestjs-i18n';
+import { join } from 'path';
 
 @Module({
   imports: [
     DatabaseModule,
+    I18nModule.forRoot({
+      fallbackLanguage: 'ru',
+      loaderOptions: {
+        path: join(__dirname, '/i18n/'),
+        watch: true,
+      },
+      resolvers: [
+        { use: QueryResolver, options: ['lang'] },
+        AcceptLanguageResolver,
+        new HeaderResolver(['x-lang']),
+      ],
+    }),
     UsersModule,
     AuthModule,
     DepartmentsModule,

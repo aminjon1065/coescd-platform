@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Department } from '../../departments/entities/department.entity';
 import { Exclude, Expose } from 'class-transformer';
+import { IsOptional } from 'class-validator';
 
 @Entity('users')
 export class User {
@@ -16,9 +17,10 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @Column({ nullable: true })
+  @IsOptional()
   @Expose()
-  refreshToken: string;
+  refreshToken?: string;
 
   @Column({ default: 'user' })
   @Expose()

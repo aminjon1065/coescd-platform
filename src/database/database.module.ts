@@ -12,7 +12,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         console.log('📦 ENV DEBUG:');
         console.log('DB_USERNAME =', config.get('DB_USERNAME'));
         console.log('DB_HOST =', config.get('DB_HOST'));
-
         return {
           type: 'postgres',
           host: config.get('DB_HOST'),

@@ -16,6 +16,10 @@ export class User {
   @Column()
   password: string;
 
+  @Column()
+  @Expose()
+  refreshToken: string;
+
   @Column({ default: 'user' })
   @Expose()
   role: string;

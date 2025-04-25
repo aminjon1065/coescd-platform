@@ -23,7 +23,7 @@ export class UsersService {
   async findByEmail(email: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { email },
-      select: ['id', 'email', 'password', 'role', 'isActive'], // обязательно указать password
+      select: ['id', 'email', 'password', 'role', 'isActive', 'refreshToken'],
     });
     if (!user) throw new NotFoundException('User not found');
     return user;
@@ -86,5 +86,16 @@ export class UsersService {
   async remove(id: number): Promise<void> {
     const user = await this.findOne(id);
     await this.userRepository.remove(user);
+  }
+
+  async updateRefreshToken(
+    userId: number,
+    refreshToken: string,
+  ): Promise<void> {
+    await this.userRepository.update(userId, { refreshToken });
+  }
+
+  async clearRefreshToken(userId: number): Promise<void> {
+    await this.userRepository.update(userId, { refreshToken: undefined });
   }
 }

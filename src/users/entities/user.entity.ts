@@ -13,6 +13,10 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Expose()
+  @Column()
+  name: string;
+
   @Exclude()
   @Column()
   password: string;

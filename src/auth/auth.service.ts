@@ -35,15 +35,15 @@ export class AuthService {
   }
 
   async login(user: Omit<User, 'password'>) {
-    const payload = { sub: user.id, email: user.email, role: user.role };
+    const payload = { sub: user.id, email: user.email, role: user.role, name: user.name };
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
 
     await this.usersService.updateRefreshToken(user.id, refreshToken);
 
     return {
-      access_token: accessToken,
-      refresh_token: refreshToken,
+      accessToken,
+      refreshToken, // можешь не возвращать в теле, если будешь ставить в cookie
     };
   }
 
@@ -61,5 +61,14 @@ export class AuthService {
 
   async logout(userId: number) {
     return this.usersService.clearRefreshToken(userId);
+  }
+
+  async refreshWithCookie(refreshToken: string) {
+    try {
+      const decoded = this.jwtService.verify(refreshToken);
+      return this.refresh(decoded.sub, refreshToken);
+    } catch (err) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }

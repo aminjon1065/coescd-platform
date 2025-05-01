@@ -23,7 +23,15 @@ export class UsersService {
   async findByEmail(email: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { email },
-      select: ['id', 'email', 'password', 'role', 'isActive', 'refreshToken'],
+      select: [
+        'id',
+        'name',
+        'email',
+        'password',
+        'role',
+        'isActive',
+        'refreshToken',
+      ],
     });
     if (!user) throw new NotFoundException('User not found');
     return user;
@@ -42,6 +50,7 @@ export class UsersService {
     const hash = await bcrypt.hash(dto.password, 10);
     const user = this.userRepository.create({
       email: dto.email,
+      name: dto.name,
       password: hash,
       role: dto.role ?? 'user',
     });
